@@ -2,18 +2,19 @@ package com.york.medical.specialization;
 
 import com.york.medical.dto.CommonApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/specializations")
 public class SpecializationController {
 
+    private final SpecializationService specializationService;
+
     @Autowired
-    private SpecializationService specializationService;
+    public SpecializationController(SpecializationService specializationService) {
+        this.specializationService = specializationService;
+    }
 
     @GetMapping
     public ResponseEntity<SpecializationResponseDto> fetchAllSpecialization() {

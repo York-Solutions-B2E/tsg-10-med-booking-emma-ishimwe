@@ -1,17 +1,24 @@
-# Use an official JDK image as the base image
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-jdk-slim AS build
 
-# Set the working directory in the container
-WORKDIR /app
+WORKDIR /opt/app
 
-# Copy the Spring Boot jar file into the container
-COPY target/medical-0.0.1-SNAPSHOT.jar app.jar
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
 
-# Ensure the jar file is executable
-RUN chmod +x /app/app.jar
+COPY src ./src
 
-# Expose the port Spring Boot app runs on
+RUN ./mvnw clean install -DskipTests
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+CMD ["./mvnw", "spring-boot:run"]
+
+FROM openjdk:17-jdk-slim AS final
+
+WORKDIR /opt/app
+
+EXPOSE 8080
+
+COPY --from=build /opt/app/target/*.jar /opt/app/*.jar
+
+ENTRYPOINT ["java", "-jar", "/opt/app/*.jar"]

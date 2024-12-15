@@ -45,6 +45,7 @@ public class AppointmentDTO {
     public AppointmentStatus getAppointmentStatus() {
         return appointmentStatus;
     }
+
     public void setAppointmentStatus(AppointmentStatus appointmentStatus) {
         this.appointmentStatus = appointmentStatus;
     }

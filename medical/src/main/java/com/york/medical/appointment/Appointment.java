@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table (name = "appointments")
+@Table(name = "appointments")
 public class Appointment {
     // Links patients with doctors
 
@@ -22,28 +22,31 @@ public class Appointment {
 
     @NotNull
     @ManyToOne
-    @JoinColumn( name = "doctor_id", referencedColumnName = "doctor_id")
+    @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id")
     private Doctor doctor;
 
     @NotNull
     @ManyToOne
-    @JoinColumn( name = "patient_id", referencedColumnName = "patient_id")
+    @JoinColumn(name = "patient_id", referencedColumnName = "patient_id")
     private Patient patient;
 
     @Enumerated(EnumType.STRING)
-    private AppointmentStatus appointmentStatus; //PENDING CONFIRMED OR CANCELLED
+    private AppointmentStatus appointmentStatus = AppointmentStatus.CONFIRMED; // PENDING CONFIRMED OR CANCELLED
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private VisitType visitType; // IN_PERSON or TELEHEALTH
 
-    public Appointment() {}
+    public Appointment() {
+    }
 
-    public Appointment(Doctor doctor, Patient patient, LocalDateTime appointmentDateTime, VisitType visitType) {
+    public Appointment(Doctor doctor, Patient patient, LocalDateTime appointmentDateTime, VisitType visitType,
+            AppointmentStatus appointmentStatus) {
         this.doctor = doctor;
         this.patient = patient;
         this.appointmentDateTime = appointmentDateTime;
         this.visitType = visitType;
+        this.appointmentStatus = appointmentStatus;
     }
 
     public Appointment(Doctor doctor, Patient patient, LocalDateTime appointmentDateTime) {

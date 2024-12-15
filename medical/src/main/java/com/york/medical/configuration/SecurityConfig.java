@@ -11,29 +11,29 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/", "/index.html", "/static/**",
-                        "/*.ico", "/*.json", "/*.png", "/api/user", "/login/oauth2/code/okta",
-                        "/api/logout","/api/**", "/error")
-                .permitAll()
-                .anyRequest().authenticated());
-        http.csrf((csrf) -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        // https://stackoverflow.com/a/74521360/65681
-                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-                 .ignoringRequestMatchers("/api/appointments/**", "/api/**") //permits public access for
+                http.authorizeHttpRequests((auth) -> auth
+                                .requestMatchers("/", "/index.html", "/static/**",
+                                                "/*.ico", "/*.json", "/*.png", "/api/user", "/login/oauth2/code/okta",
+                                                "/api/logout", "/api/**", "/error")
+                                .permitAll()
+                                .anyRequest().authenticated());
+                http.csrf((csrf) -> csrf
+                                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                                // https://stackoverflow.com/a/74521360/65681
+                                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                                .ignoringRequestMatchers("/api/appointments/**", "/api/**") // permits public access for
                 // POST, PUT, DELETE requests (not requiring csrf token)
-        );
+                );
 
-        //http.csrf((csrf) -> csrf.disable());
-        http.addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class);
-        http.oauth2Login(oauth2 -> oauth2
-                .defaultSuccessUrl("/", true) // Redirect to frontend after success
-        );
+                // http.csrf((csrf) -> csrf.disable());
+                http.addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class);
+                http.oauth2Login(oauth2 -> oauth2
+                                .defaultSuccessUrl("/", true) // Redirect to frontend after success
+                );
 
-        return http.build();
-    }
+                return http.build();
+        }
 }

@@ -4,7 +4,7 @@ FROM postgres:latest
 # Set environment variables for the PostgreSQL database
 ENV POSTGRES_USER=admin
 ENV POSTGRES_PASSWORD=admin
-ENV POSTGRES_DB=medicaldb
+ENV POSTGRES_DB=healthcare_db
 
 # Copy initialization scripts to the Docker image
 # These scripts will be executed when the container starts

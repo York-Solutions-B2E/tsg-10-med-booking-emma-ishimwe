@@ -4,15 +4,16 @@ import com.york.medical.doctor.Doctor;
 import com.york.medical.doctor.DoctorRepository;
 import com.york.medical.patient.Patient;
 import com.york.medical.patient.PatientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class AppointmentService {
 
@@ -20,8 +21,8 @@ public class AppointmentService {
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
 
-    @Autowired
-    public AppointmentService(AppointmentRepository appointmentRepository, DoctorRepository doctorRepository, PatientRepository patientRepository) {
+    public AppointmentService(AppointmentRepository appointmentRepository, DoctorRepository doctorRepository,
+            PatientRepository patientRepository) {
         this.appointmentRepository = appointmentRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
@@ -33,7 +34,7 @@ public class AppointmentService {
     }
 
     // Get a List of all appointments
-    public List<Appointment> getAllAppointments(){
+    public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
 
@@ -51,13 +52,15 @@ public class AppointmentService {
         // find doctor
         Optional<Doctor> doctorOptional = doctorRepository.findById(appointmentDTO.getDoctorId());
         if (doctorOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor with ID: " + appointmentDTO.getDoctorId() + " not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Doctor with ID: " + appointmentDTO.getDoctorId() + " not found");
         }
 
         // find patient
         Optional<Patient> patientOptional = patientRepository.findById(appointmentDTO.getPatientId());
         if (patientOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found with ID: " + appointmentDTO.getPatientId());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Patient not found with ID: " + appointmentDTO.getPatientId());
         }
 
         // Check for existing appointments
@@ -74,15 +77,14 @@ public class AppointmentService {
         }
 
         // Create appointment object
-        Appointment appointment = new Appointment(
+        Appointment createdAppointment = new Appointment(
                 doctorOptional.get(),
                 patientOptional.get(),
                 appointmentDTO.getAppointmentDateTime(),
-                appointmentDTO.getVisitType()
-        );
-        appointment.setAppointmentStatus(AppointmentStatus.CONFIRMED);
+                appointmentDTO.getVisitType(),
+                appointmentDTO.getAppointmentStatus());
         // Save and return appointment
-        return appointmentRepository.save(appointment);
+        return appointmentRepository.save(createdAppointment);
     }
 
     // Cancel an Appointment
@@ -102,6 +104,7 @@ public class AppointmentService {
         return appointmentRepository.save(existingAppointment);
     }
 
+    // Update Appointment
     public Appointment updateAppointment(Long id, AppointmentDTO appointmentDTO) {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
 

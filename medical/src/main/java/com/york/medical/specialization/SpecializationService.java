@@ -2,13 +2,11 @@ package com.york.medical.specialization;
 
 import com.york.medical.dto.CommonApiResponse;
 import com.york.medical.exception.SpecializationSaveFailedException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +15,6 @@ public class SpecializationService {
 
     private final SpecializationRepository specializationRepository;
 
-    @Autowired
     SpecializationService(SpecializationRepository specializationRepository) {
         this.specializationRepository = specializationRepository;
     }
@@ -32,7 +29,7 @@ public class SpecializationService {
             return new ResponseEntity<CommonApiResponse>(response, HttpStatus.BAD_REQUEST);
         }
 
-        //specialization.setStatus(Constants.ActiveStatus.ACTIVE.value());
+        // specialization.setStatus(Constants.ActiveStatus.ACTIVE.value());
         Specialization savedSpecialization = specializationRepository.save(specialization);
 
         if (savedSpecialization == null) {
@@ -81,7 +78,6 @@ public class SpecializationService {
             return new ResponseEntity<CommonApiResponse>(response, HttpStatus.BAD_REQUEST);
         }
 
-        //specialization.setStatus(Constants.ActiveStatus.ACTIVE.value());
         Specialization savedSpecialization = specializationRepository.save(specialization);
 
         if (savedSpecialization == null) {

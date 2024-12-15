@@ -1,21 +1,35 @@
-
-
-# Build The React Application
-FROM node:20-alpine 
+# Step 1 Build The React Application
+FROM node:lts AS build
 
 # Set the working environment 
-WORKDIR /app
+WORKDIR /opt/app
 
-# Copy package files and install dependencies 
-COPY package*.json . 
+# Copy package.json and package-lock.json
+COPY package*json ./
 
-#run the build
+# Install dependencies
 RUN npm install
 
-COPY . . 
+# Copy the entire project into the container
+COPY . .
 
-# Expose port
-EXPOSE 3000 
+# Build the application
+RUN npm run build
 
-CMD [ "npm","run","dev"]
+# Step 2: Serve the React application using Node.js
+FROM node:lts AS serve
 
+# Set the working directory
+WORKDIR /opt/app
+
+# Install a lightweight static file server (e.g., serve)
+RUN npm install -g serve
+
+# Copy the built files from the build stage
+COPY --from=build /opt/app/dist ./build
+
+# Expose the port where the app will run
+EXPOSE 3000
+
+# Use `serve` to serve the static files
+CMD ["serve", "-s", "build", "-l", "3000"]

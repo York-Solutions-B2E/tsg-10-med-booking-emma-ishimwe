@@ -5,9 +5,7 @@ import com.york.medical.appointment.AppointmentRepository;
 import com.york.medical.specialization.Specialization;
 import com.york.medical.specialization.SpecializationRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,7 +20,8 @@ public class DoctorService {
     private final SpecializationRepository specializationRepository;
     private final AppointmentRepository appointmentRepository;
 
-    public DoctorService(DoctorRepository doctorRepository, SpecializationRepository specializationRepository, AppointmentRepository appointmentRepository) {
+    public DoctorService(DoctorRepository doctorRepository, SpecializationRepository specializationRepository,
+            AppointmentRepository appointmentRepository) {
         this.doctorRepository = doctorRepository;
         this.specializationRepository = specializationRepository;
         this.appointmentRepository = appointmentRepository;
@@ -44,15 +43,15 @@ public class DoctorService {
 
     public Doctor createNewDoctor(DoctorDTO doctorDTO) {
 
-        Optional<Specialization> specializationOptional = specializationRepository.findById(doctorDTO.getSpecializationId());
+        Optional<Specialization> specializationOptional = specializationRepository
+                .findById(doctorDTO.getSpecializationId());
         if (specializationOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Specialization Not Found");
         }
         Doctor doctor = new Doctor(
                 doctorDTO.getFirstName(),
                 doctorDTO.getLastName(),
-                specializationOptional.get()
-        );
+                specializationOptional.get());
         return this.doctorRepository.save(doctor);
     }
 
@@ -86,10 +85,8 @@ public class DoctorService {
         }
 
         // Save the updated doctor
-         doctorRepository.save(existingDoctor);
+        doctorRepository.save(existingDoctor);
         return existingDoctor;
     }
-
-
 
 }
