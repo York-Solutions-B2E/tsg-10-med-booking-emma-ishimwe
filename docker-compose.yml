@@ -5,9 +5,9 @@ services:
     container_name: postgres_db
     env_file: ".env.yml"
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: healthcare_db
+      POSTGRES_USER: 
+      POSTGRES_PASSWORD: 
+      POSTGRES_DB:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
