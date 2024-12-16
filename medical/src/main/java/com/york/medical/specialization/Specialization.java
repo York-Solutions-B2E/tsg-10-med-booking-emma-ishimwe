@@ -20,6 +20,10 @@ public class Specialization {
     public Specialization() {
     }
 
+    public Specialization (Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
     public Specialization(String name) {
         this.name = name;
     }

@@ -17,8 +17,8 @@ public class SpecializationController {
     }
 
     @GetMapping
-    public ResponseEntity<SpecializationResponseDto> fetchAllSpecialization() {
-        return specializationService.fetchAllSpecialization();
+    public ResponseEntity<SpecializationResponseDto> fetchAllSpecializations() {
+        return specializationService.fetchAllSpecializations();
     }
 
     @PostMapping("/add")

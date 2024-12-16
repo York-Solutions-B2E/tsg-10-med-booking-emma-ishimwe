@@ -41,7 +41,7 @@ public class SpecializationService {
 
     }
 
-    public ResponseEntity<SpecializationResponseDto> fetchAllSpecialization() {
+    public ResponseEntity<SpecializationResponseDto> fetchAllSpecializations() {
         SpecializationResponseDto response = new SpecializationResponseDto();
 
         // Fetch all specializations
